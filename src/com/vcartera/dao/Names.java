@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.StringJoiner;
 
 /**
+ * Data Access Object for goEuro JSON Names object
  * Created by Vitalie on 9/9/2016.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Names {
+public class Names extends DataAccessObject {
 
+    // static member holds all the available unique keys
     private static HashMap<String, Object> headers = new HashMap<>();
-    private HashMap<String, Object> data = new HashMap<>();
-
 
     public void setPt(String pt) {
         pt = (pt == null) ? "" : pt;
@@ -83,6 +83,10 @@ public class Names {
         headers.put("de", de);
     }
 
+    /**
+     * Joins all the available keys to form the header
+     * @return headers string
+     */
     public static String header() {
         StringJoiner result = new StringJoiner(",");
         for (String key : headers.keySet()) {
@@ -92,7 +96,10 @@ public class Names {
         return result.toString();
     }
 
-    @Override
+    /**
+     * Joins all fields with commas
+     * @return concatenated row separated by commas
+     */
     public String toString() {
         StringJoiner result = new StringJoiner(",");
         for (String key : headers.keySet()) {

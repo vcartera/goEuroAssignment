@@ -16,6 +16,11 @@ import java.util.List;
 
 
 /**
+ * Main entry goEuro Assignment
+ * Command line tool: takes city name as command line argument and produces a CSV formatted file.
+ *
+ * Accesses an API endpoint and consumes specific JSON formatted data (as per assignment specs).
+ *
  * Created by Vitalie on 9/8/2016.
  */
 public class GoEuroTest {
@@ -30,6 +35,7 @@ public class GoEuroTest {
 
     public static void main(String[] args) throws Exception {
 
+        // check command line arguments and prints error message
         if (args.length == 0) {
             System.out.println(ARGUMENTS_ERROR);
             System.exit(0);
@@ -37,34 +43,41 @@ public class GoEuroTest {
 
         String city = args[0];
 
+        // Access endpoint and retrieve JSON data
         URL url = new URL(ENDPOINT + city);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod(REQUEST_METHOD);
 
+        // Parse and map JSON object to DAO's
         BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         ObjectMapper mapper = new ObjectMapper();
-
         List<Location> items = mapper.readValue(rd,
                 new TypeReference<ArrayList<Location>>() {
                 });
 
         String output = "";
         String eol = System.getProperty(SYSTEM_LINE_SEPARATOR);
+
+        // Grab headers..
         output += Location.header() + eol;
 
+        // .. join and format data
         for (Location item : items) {
             output += item.toString() + eol;
         }
 
         rd.close();
 
+        // Write to the output file
         try {
             String fn = args.length > 1 ? args[1] : city;
             File file = new File(fn + CSV_FILE_EXTENSION);
             FileUtils.writeStringToFile(file, output);
+            // Success
             System.out.println(OUTPUT_MESSAGE + file );
         } catch (IOException e) {
+
             // File could not be created
             System.out.println(OUTPUT_ERROR);
 
