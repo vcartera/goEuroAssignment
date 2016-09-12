@@ -26,7 +26,7 @@ import java.util.List;
 public class GoEuroTest {
 
     private static final String ENDPOINT = "http://api.goeuro.com/api/v2/position/suggest/en/";
-    private static final String ARGUMENTS_ERROR = "City name is missing from arguments.\n\rExample of usage: java -jar GoEuroTest.jar \"CITY_NAME\"";
+    private static final String ARGUMENTS_ERROR = "City name is required.\n\rExample of usage: java -jar GoEuroTest.jar \"CITY_NAME\"";
     private static final String OUTPUT_ERROR = "Could not create output file";
     private static final String REQUEST_METHOD = "GET";
     private static final String SYSTEM_LINE_SEPARATOR = "line.separator";
