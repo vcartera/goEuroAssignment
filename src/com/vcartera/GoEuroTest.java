@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * Main entry goEuro Assignment
  * Command line tool: takes city name as command line argument and produces a CSV formatted file.
- *
+ * <p>
  * Accesses an API endpoint and consumes specific JSON formatted data (as per assignment specs).
- *
+ * <p>
  * Created by Vitalie on 9/8/2016.
  */
 public class GoEuroTest {
@@ -43,18 +43,31 @@ public class GoEuroTest {
 
         String city = args[0];
 
+        // Retrieve data, map JSON to DAO, parse and format
+        String output = mapAndFormat(retrieveData(city));
+
+        // Write to the output file
+        writeCSV(output, city);
+    }
+
+    private static HttpURLConnection retrieveData(String city) throws Exception {
         // Access endpoint and retrieve JSON data
         URL url = new URL(ENDPOINT + city);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod(REQUEST_METHOD);
+        return connection;
+    }
 
+    private static String mapAndFormat(HttpURLConnection connection) throws Exception {
         // Parse and map JSON object to DAO's
         BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         ObjectMapper mapper = new ObjectMapper();
         List<Location> items = mapper.readValue(rd,
                 new TypeReference<ArrayList<Location>>() {
                 });
+
+        rd.close();
 
         String output = "";
         String eol = System.getProperty(SYSTEM_LINE_SEPARATOR);
@@ -67,17 +80,16 @@ public class GoEuroTest {
             output += item.toString() + eol;
         }
 
-        rd.close();
+        return output;
+    }
 
-        // Write to the output file
+    private static void writeCSV(String output, String city) {
         try {
-            String fn = args.length > 1 ? args[1] : city;
-            File file = new File(fn + CSV_FILE_EXTENSION);
+            File file = new File(city + CSV_FILE_EXTENSION);
             FileUtils.writeStringToFile(file, output);
             // Success
-            System.out.println(OUTPUT_MESSAGE + file );
+            System.out.println(OUTPUT_MESSAGE + file);
         } catch (IOException e) {
-
             // File could not be created
             System.out.println(OUTPUT_ERROR);
 

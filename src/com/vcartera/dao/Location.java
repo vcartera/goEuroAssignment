@@ -105,6 +105,7 @@ public class Location extends DataAccessObject {
 
     /**
      * Joins all the available keys to form the header
+     *
      * @return headers string
      */
     public static String header() {
@@ -123,6 +124,7 @@ public class Location extends DataAccessObject {
 
     /**
      * Joins all fields with commas
+     *
      * @return concatenated row separated by commas
      */
     public String toString() {
