@@ -100,7 +100,7 @@ public class Names extends DataAccessObject {
     /**
      * Joins all fields with commas
      *
-     * @return concatenated row separated by commas
+     * @return concatenated values separated by commas
      */
     public String toString() {
         StringJoiner result = new StringJoiner(",");
